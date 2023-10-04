@@ -2,20 +2,14 @@ const status = require("http-status");
 
 const {AppError,ValidationError}=require("../utils/errors/index")
 
-const {Booking}=require("../models/index")
+const {FlightBooking}=require("../models/index")
 
 class BookingRepository{
 
 
     async create(data){
         try {
-            const result=await Booking.create({
-                flightId:data.flightId,
-                userId:data.userID,
-                noOfSeats:data.noOfSeats,
-                price:data.price,
-                people:data.people
-            });
+            const result=await FlightBooking.create(data);
             return result;
         } catch (error) {
             if(error.name=="SequelizeValidationError"){
@@ -27,7 +21,7 @@ class BookingRepository{
 
     async update(updateId){
         try {
-            const value=await Booking.findByPk(updateId);
+            const value=await FlightBooking.findByPk(updateId);
             value.status="BOOKED"
             await value.save();
             return value;

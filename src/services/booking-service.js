@@ -15,17 +15,19 @@ class BookingService{
             // http://localhost:3500/api/v1/flights/13
             const getFlightURL=`${FLIGHT_URL}/api/v1/flights/${flightId}`
             const getFlightData=await axios.get(getFlightURL);
-            if(getFlightData.data.data.totalSeats<noOfSeats){
+            const getFlightObj=getFlightData.data.data;
+            console.log(getFlightObj);
+            if(getFlightObj.totalSeats<noOfSeats){
                 throw new ServiceError("Something went wrong while booking");
             }
-            const price=getFlightData.data.data.price*noOfSeats;
-            const people=noOfSeats
+            const totalCost=getFlightObj.price*noOfSeats;
 
-            const payload={...data,price,people};
+            const payload={...data,totalCost};
+            console.log(payload);
             const booking=await this.bookingRepo.create(payload);
-            console.log(booking);
-            const updateFlightURL=`${getFlightURL}/api/v1/flights/${flightId}`;
-            await axios.patch(updateFlightURL,{totalSeats:getFlightData.totalSeats-booking.noOfSeats})
+            const updateFlightURL=`${FLIGHT_URL}/api/v1/flights/${flightId}`;
+            console.log("FLight update req url",updateFlightURL);
+            await axios.patch(updateFlightURL,{totalSeats:getFlightObj.totalSeats-booking.noOfSeats})
             const finalBooking=await this.bookingRepo.update(booking.id);
             return finalBooking;
         } catch (error) {
