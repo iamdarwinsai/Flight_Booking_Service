@@ -5,7 +5,7 @@ class ServiceError extends Error{
     constructor(
         name="ServiceError",
         explanantion="Error in service layer",
-        message="Something went wrong",
+        message="Something went wrong in service layer",
         statusCode=status.INTERNAL_SERVER_ERROR
     ){
         super();

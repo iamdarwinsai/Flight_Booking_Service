@@ -12,6 +12,7 @@ class BookingService{
     async create(data){
         try {
             const{flightId,noOfSeats}=data;
+            console.log(data);
             // http://localhost:3500/api/v1/flights/13
             const getFlightURL=`${FLIGHT_URL}/api/v1/flights/${flightId}`
             const getFlightData=await axios.get(getFlightURL);
